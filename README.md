@@ -29,7 +29,7 @@ A fully working dark mode mod for Unity Editor on Windows 11 with:
 - Enjoy the dark mode!
 
 ## How to change the theme?
-After first launch, a `UnityDarkModeDll.dll.ini` file will be created in the same directory as the dll. You can modify the values in this file to change the theme.
+After first launch, a `UnityEditorDarkMode.dll.ini` file will be created in the same directory as the dll. You can modify the values in this file to change the theme.
 
 ## How it works?
 This project is basically a special build of [ReaperThemeHackDll](https://github.com/jjYBdx4IL/ReaperThemeHackDll) made by [jjYBdx4IL](https://github.com/jjYBdx4IL) with some minor modifications. Feel free to take a look at the source code of ReaperThemeHackDll if you are intersted.
