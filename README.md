@@ -12,7 +12,7 @@ This works 100% on Windows 11 and should work on Windows 10 as well (most likely
 ## How to use it?
 - Download the `UnityEditorDarkMode.dll` from [releases](https://github.com/0x7c13/UnityEditor-DarkMode/releases)
 
-  > **WARNING:** if you feel uncomfortable downloading a malicious DLL from a stranger like me from the internet, then you should not:) Take a look at the last section to see how it works and how to build it yourself if you wish. Please do your own homework and make your own judgement.
+  > **WARNING:** If you feel uncomfortable downloading a malicious DLL from a stranger like me, then you should not:) Take a look at the last section to see how it works and how to build it yourself if you wish. Please do your own homework and make your own judgement. I offer this approach as a convenience for those who don't want to build a C++ project themselves.
 - Add a Unity editor script to your project like below:
     ```C#
     namespace Editor.Theme // Change this to your own namespace you like or simply remove it
@@ -41,7 +41,7 @@ After first launch, a `UnityEditorDarkMode.dll.ini` file will be created in the 
 Remove the Unity editor script you added to your project and that's it! All magic happens at runtime:)
 
 ## How it works?
-This project is basically a special build of [ReaperThemeHackDll](https://github.com/jjYBdx4IL/ReaperThemeHackDll) made by [jjYBdx4IL](https://github.com/jjYBdx4IL) with some minor modifications (That's why I did not include my source code of the dll in this repository since I don't want to take his credit). Feel free to take a look at the source code of ReaperThemeHackDll if you are intersted. If you like this project, please consider giving a star to the ReaperThemeHackDll project as well. Actually, his code with some minor modifications can be used to theme any legacy Windows applications that uses the Win32 title bar, menu bar, context menu, etc.
+This project is basically a special build of [ReaperThemeHackDll](https://github.com/jjYBdx4IL/ReaperThemeHackDll) made by [jjYBdx4IL](https://github.com/jjYBdx4IL) with some minor modifications (That's why I did not include my source code of the dll in this repository since I don't want to take his credit). Feel free to take a look at the source code of `ReaperThemeHackDll` if you are intersted. If you like this project, please consider giving a star to the ReaperThemeHackDll project as well. Actually, his code with some minor modifications can be used to theme any legacy Windows applications that uses the Win32 title bar, menu bar, context menu, etc.
 
 Ok, so what I have done on top of `ReaperThemeHackDll` is:
 - Remove all the unnecessary dependencies of Reaper framework and plugin code since we don't need them for Unity Editor hack.
@@ -51,6 +51,7 @@ Ok, so what I have done on top of `ReaperThemeHackDll` is:
     private static extern int GetClassName(IntPtr hWnd, char[] lpClassName, int nMaxCount);
     ```
 - I have verified that the window class name is consistent across different Unity Editor versions (2020, 2021, 2022, 2023, Unity 6) so it should work on most versions. If not, you should probably make further modifications to the code to use the C++ `GetClassName` Win32 API to get the window class name dynamically at runtime.
+
   > **NOTE:** If you do this, it basically means this hack can be used for any Windows application that uses the default white Win32 title bar, menu bar, context menu, etc.
 - A different color preset is given by default which I think looks better with Unity Editor.
 - Some inrelevent code is also removed and some minor modifications are made to make it more performant and clean. You don't have to do it tho so I am not going to explain them here.
@@ -69,7 +70,7 @@ Ok, so what I have done on top of `ReaperThemeHackDll` is:
 ## Known issues
 > I haven't found any issues so far using it with Unity 2021, 2022, 2023, and Unity 6 on Windows 11.
 
-However, I do observe an issue with `Unity 2020`. It looks like the `[InitializeOnLoadMethod]` is getting called before the main window is created in Unity 2020. This is causing the sub-classing to fail. It looks like that [InitializeOnLoadMethod] actually getting called when the splash window is shown on Unity 2020. So a workaround is to manually call the `_()` method after the main window is created by sleep for some time. You can do this by making below changes to the editor script:
+However, I do observe an issue with `Unity 2020`. It looks like the `[InitializeOnLoadMethod]` is getting called before the main window is created in Unity 2020. This is causing the sub-classing to fail. It looks like that `[InitializeOnLoadMethod]` actually getting called when the splash window is shown on Unity 2020. So a workaround is to manually call the `_()` method after the main window is created by sleep for some time. You can do this by making below changes to the editor script:
 ```C#
 namespace Editor.Theme // Change this to your own namespace you like or simply remove it
 {
@@ -86,7 +87,7 @@ namespace Editor.Theme // Change this to your own namespace you like or simply r
         private static extern void _();
 
         [InitializeOnLoadMethod]
-        public static void EnableDarkMode()
+        public static void __()
         {
             Thread.Sleep(100); // Sleep for 100ms to wait for the main window to be created
             _();
