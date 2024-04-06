@@ -1,4 +1,4 @@
-# UnityEditor DarkMode Mod for Windows
+# DarkMode Mod for UnityEditor on Windows
 A fully working dark mode mod for Unity Editor on Windows with:
 - Dark title bar
 - Dark menu bar
