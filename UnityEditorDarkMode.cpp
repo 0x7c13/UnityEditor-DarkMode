@@ -44,6 +44,16 @@ enum
     WM_UAHNCPAINTMENUPOPUP = 0x0095
 };
 
+// undocumented app mode enum for the private SetPreferredAppMode API
+enum class PreferredAppMode
+{
+    Default,
+    AllowDark,
+    ForceDark,
+    ForceLight,
+    Max
+};
+
 // describes the sizes of the menu bar or menu item
 typedef union tagUAHMENUITEMMETRICS
 {
@@ -116,10 +126,9 @@ typedef struct {
     HBRUSH menubaritem_bgbrush_selected;
 } theme_cfg;
 
+// global variables
 static HTHEME g_menuTheme = nullptr;
 HHOOK g_hook = nullptr;
-
-LRESULT CALLBACK CallWndSubClassProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 
 bool IsWndClass(HWND hWnd, const TCHAR* classname) {
     TCHAR buf[512];
@@ -169,8 +178,8 @@ const theme_cfg* LoadThemeConfig() {
         configFile << "menubar_textcolor_disabled = 160,160,160" << std::endl;
         configFile << "menubar_bgcolor = 48,48,48" << std::endl;
         configFile << "menubaritem_bgcolor = 48,48,48" << std::endl;
-        configFile << "menubaritem_bgcolor_hot = 48,48,48" << std::endl;
-        configFile << "menubaritem_bgcolor_selected = 48,48,48" << std::endl;
+        configFile << "menubaritem_bgcolor_hot = 62,62,62" << std::endl;
+        configFile << "menubaritem_bgcolor_selected = 62,62,62" << std::endl;
         configFile.close();
     }
 
@@ -208,37 +217,40 @@ const theme_cfg* LoadThemeConfig() {
 // https://stackoverflow.com/questions/39261826/change-the-color-of-the-title-bar-caption-of-a-win32-application
 // https://gist.github.com/rounk-ctrl/b04e5622e30e0d62956870d5c22b7017
 // https://github.com/microsoft/WindowsAppSDK/issues/41
+// https://gist.github.com/ericoporto/1745f4b912e22f9eabfce2c7166d979b
 void EnableDarkMode(HWND hWnd) {
 
-    const BOOL USE_DARK_MODE = true;
-
-    DwmSetWindowAttribute(hWnd,
-        DWMWA_USE_IMMERSIVE_DARK_MODE,
-        &USE_DARK_MODE,
-        sizeof(USE_DARK_MODE));
-
-    static HMODULE hUxtheme = nullptr;
-
-    enum class PreferredAppMode
+    // apply dark mode to the window
     {
-        Default,
-        AllowDark,
-        ForceDark,
-        ForceLight,
-        Max
-    };
+        const BOOL USE_DARK_MODE = true;
 
-    // ordinal 135, in 1903
-    using fnSetPreferredAppMode = PreferredAppMode(WINAPI*)(PreferredAppMode appMode);
-    fnSetPreferredAppMode SetPreferredAppMode;
-
-    if (!hUxtheme) {
-        hUxtheme = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+        DwmSetWindowAttribute(hWnd,
+            DWMWA_USE_IMMERSIVE_DARK_MODE,
+            &USE_DARK_MODE,
+            sizeof(USE_DARK_MODE));
     }
 
-    SetPreferredAppMode = (fnSetPreferredAppMode)GetProcAddress(hUxtheme, MAKEINTRESOURCEA(135));
-    SetPreferredAppMode(PreferredAppMode::ForceDark);
+    // apply dark mode to the context menus
+    {
+        using fnSetPreferredAppMode = PreferredAppMode(WINAPI*)(PreferredAppMode appMode);
+        fnSetPreferredAppMode SetPreferredAppMode;
+
+        static HMODULE hUxtheme = nullptr;
+
+        if (!hUxtheme) {
+            hUxtheme = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+        }
+
+        if (hUxtheme) {
+            // #135 is the ordinal for SetPreferredAppMode private API
+            // which is available in uxtheme.dll since Windows 10 1903+
+            SetPreferredAppMode = (fnSetPreferredAppMode)GetProcAddress(hUxtheme, MAKEINTRESOURCEA(135));
+            SetPreferredAppMode(PreferredAppMode::ForceDark);
+		}
+    }
 }
+
+LRESULT CALLBACK CallWndSubClassProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 
 LRESULT CALLBACK CBTProc(int nCode, WPARAM wParam, LPARAM lParam) {
     switch (nCode) {
@@ -417,6 +429,7 @@ LRESULT CALLBACK CallWndSubClassProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
                     return TRUE;
                 }
             }
+            break;
         }
         case WM_NCACTIVATE:
         {
@@ -600,6 +613,7 @@ bool APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpRes) {
     switch (reason)
     {
         case DLL_PROCESS_ATTACH: {
+            // enable dark mode for the current process window
             EnableDarkMode(nullptr);
 
             // catch windows that have been created before we set up the CBTProc hook
@@ -611,6 +625,7 @@ bool APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpRes) {
                 EnableDarkMode(hWnd);
             }
 
+            // set up the CBTProc hook to catch new windows
             g_hook = SetWindowsHookEx(WH_CBT, CBTProc, nullptr, GetCurrentThreadId());
             break;
         }

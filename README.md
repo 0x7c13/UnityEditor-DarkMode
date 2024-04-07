@@ -1,13 +1,13 @@
 # DarkMode Mod for UnityEditor on Windows
  <a style="text-decoration:none" href="https://github.com/0x7c13/UnityEditor-DarkMode/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/0x7c13/UnityEditor-DarkMode/ci.yml" alt="Size" /></a> 
 
-A fully working dark mode mod for Unity Editor on Windows with:
+A fully working runtime dark mode mod for Unity Editor on Windows with:
 - Dark title bar
 - Dark menu bar
 - Dark context menu
 - And more...
 
-This works 100% on Windows 11 and should work on Windows 10 as well (most likely, not tested).
+This works 100% on Windows 11 and should work on Windows 10 1903+ as well.
 
 ![Screenshot](screenshot.png?raw=true)
 
@@ -33,6 +33,7 @@ This works 100% on Windows 11 and should work on Windows 10 as well (most likely
         }
     }
     ```
+    > **NOTE:** You could also inject the dll using `withdll.exe` from [Detours](https://github.com/microsoft/Detours). But I prefer this approach as it is  clean and doesn't require any external tools. Instructions are provided in the later sections for the use of `withdll.exe`.
 - Restart Unity Editor and you are done!
 - Now enjoy the immersive dark mode in Unity Editor!
 
