@@ -16,15 +16,22 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up MSVC toolchain
+    - name: Setup MSVC toolchain
       uses: ilammy/msvc-dev-cmd@v1
       
     - name: Install CMake
       uses: lukka/get-cmake@latest
 
-    - name: Build
+    - name: Build project
       run: |
         cmake -B build
         cd build
         cmake --build . --config Release
+
+    - name: Upload build artifacts
+      - uses: actions/upload-artifact@latest
+        with:
+          name: ci-build
+          path: build/Release
+          retention-days: 14
 
