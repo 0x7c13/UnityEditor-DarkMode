@@ -29,9 +29,9 @@ jobs:
         cmake --build . --config Release
 
     - name: Upload build artifacts
-      - uses: actions/upload-artifact@latest
-        with:
-          name: ci-build
-          path: build/Release
-          retention-days: 14
+      uses: actions/upload-artifact@latest
+      with:
+        name: ci-build
+        path: build/Release
+        retention-days: 14
 
