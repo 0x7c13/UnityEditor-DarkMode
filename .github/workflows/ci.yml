@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup MSVC toolchain
+      uses: ilammy/msvc-dev-cmd@v1
+      
+    - name: Install CMake
+      uses: lukka/get-cmake@latest
+
+    - name: Build project
+      run: |
+        cmake -B build
+        cd build
+        cmake --build . --config Release
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4.3.1
+      with:
+        name: ci-build
+        path: build/Release
+        retention-days: 14
+

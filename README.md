@@ -1,4 +1,6 @@
 # DarkMode Mod for UnityEditor on Windows
+ <a style="text-decoration:none" href="https://github.com/0x7c13/UnityEditor-DarkMode/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/0x7c13/UnityEditor-DarkMode/actions/workflows/ci.yml" alt="Size" /></a> 
+
 A fully working dark mode mod for Unity Editor on Windows with:
 - Dark title bar
 - Dark menu bar
