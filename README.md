@@ -12,7 +12,7 @@ This works 100% on Windows 11 and should work on Windows 10 as well (most likely
 ## How to use it?
 - Download the `UnityEditorDarkMode.dll` from [releases](https://github.com/0x7c13/UnityEditor-DarkMode/releases)
 
-  > **WARNING:** If you feel uncomfortable downloading a malicious DLL from a stranger like me, then you should not:) Take a look at the last section to see how it works and how to build it yourself if you wish. Please do your own homework and make your own judgement. I offer this approach as a convenience for those who don't want to build a C++ project themselves.
+  > **WARNING:** If you feel uncomfortable downloading a malicious DLL from a stranger like me, then you should not:) Take a look at later sections to see how it works and how to build it yourself if you prefer. Please do your own homework and make your own judgement. I offer this approach as a convenience for those who don't want to build a C++ project themselves.
 - Add a Unity editor script to your project like below:
     ```C#
     namespace Editor.Theme // Change this to your own namespace you like or simply remove it
@@ -40,8 +40,18 @@ After first launch, a `UnityEditorDarkMode.dll.ini` file will be created in the 
 ## How to remove it?
 Remove the Unity editor script you added to your project and that's it! All magic happens at runtime:)
 
+## How to build it?
+- Make sure latest `CMake`, `Visual Studio` and `MSVC toolchain` are installed on your system. Then run below command in the project directory:
+
+    ```cmd
+    cmake -B build && cd build && cmake --build . --config Release
+    ```
+    > NOTE: You may need to add `cmake` to your system path if you haven't already.
+
+- The `UnityEditorDarkMode.dll` will be created under the `build\Release` directory after the build finishes successfully.
+
 ## How it works?
-This project is basically a special build of [ReaperThemeHackDll](https://github.com/jjYBdx4IL/ReaperThemeHackDll) made by [jjYBdx4IL](https://github.com/jjYBdx4IL) with some minor modifications (That's why I did not include my source code of the dll in this repository since I don't want to take his credit). Feel free to take a look at the source code of `ReaperThemeHackDll` if you are intersted. If you like this project, please consider giving a star to the ReaperThemeHackDll project as well. Actually, his code with some minor modifications can be used to theme any legacy Windows applications that uses the Win32 title bar, menu bar, context menu, etc.
+This project is basically a stripped down version of [ReaperThemeHackDll](https://github.com/jjYBdx4IL/ReaperThemeHackDll) made by [jjYBdx4IL](https://github.com/jjYBdx4IL) with some minor modifications. If you like this project, please consider giving a star to the `ReaperThemeHackDll` project as well. Actually, his code with some minor modifications can be used to theme any legacy Windows applications that uses the Win32 title bar, menu bar, context menu, etc.
 
 Ok, so what I have done on top of `ReaperThemeHackDll` is:
 - Remove all the unnecessary dependencies of Reaper framework and plugin code since we don't need them for Unity Editor hack.
