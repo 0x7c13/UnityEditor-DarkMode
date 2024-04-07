@@ -7,7 +7,7 @@ A fully working runtime dark mode mod for Unity Editor on Windows with:
 - Dark context menu
 - And more...
 
-> This works 100% on Windows 11 and should work on Windows 10 1903+ as well. Tested on Unity 2019, 2020, 2021, 2022, 2023, and Unity 6.
+> This works 100% on Windows 11 and should work on Windows 10 1903+ as well. Tested on Unity 2019, 2020, 2021, 2022, 2023 and Unity 6.
 
 ![Screenshot](screenshot.png?raw=true)
 
@@ -54,7 +54,7 @@ A fully working runtime dark mode mod for Unity Editor on Windows with:
         }
     }
     ```
-    > **NOTE:** You could also inject the dll using `withdll.exe` from [Detours](https://github.com/microsoft/Detours). But I prefer this approach as it is clean and doesn't require any external tools. Instructions are provided in the later sections for the use of `withdll.exe`.
+    > **NOTE:** You could also inject the dll using `withdll.exe` from [Detours](https://github.com/microsoft/Detours). Instructions are provided in the later sections for the use of `withdll.exe`.
 - Restart Unity Editor and you are done!
 - Now enjoy the immersive dark mode in Unity Editor!
 
@@ -68,7 +68,7 @@ Remove the Unity editor script you added to your project and that's it! All magi
 - Make sure latest `CMake`, `Visual Studio` and `MSVC toolchain` are installed on your system. Then run below command in the project directory:
 
     ```cmd
-    cmake -B build && cd build && cmake --build . --config Release
+    cmake -B build && cmake --build build --config Release
     ```
     > NOTE: You may need to add `cmake` to your system path if you haven't already.
 
@@ -104,4 +104,4 @@ Ok, so what I have done on top of `ReaperThemeHackDll` is:
 ## Known issues
 > I haven't found any major issues so far. Please let me know if you find any issues by creating an issue in this repository. 
 
-The reason why the dll injection script is different for `Unity 2021 or later` and `Unity 2020 or earlier` is because of the way Unity Editor initializes the main window. It looks like the `[InitializeOnLoadMethod]` is getting called before the main window is created in earlier versions of Unity (2019, 2020). This is causing the sub-classing to fail since the main window is not found at dll attach time. So a simple workaround is to manually invoke the dll after the main window is created by sleeping the thread for some time. 100 ms is about right but you can adjust it if you encounter any issues.
+The reason why the dll injection script is different for `Unity 2021 or later` and `Unity 2020 or earlier` is because of the way Unity Editor initializes the main window. It looks like the `[InitializeOnLoadMethod]` is getting called before the main window is created in earlier versions of Unity (2019, 2020). This is causing the sub-classing to fail since the main window is not found at dll attach time. So a simple workaround is to manually invoke the dll after the main window is created by sleeping the thread for some time. 100 ms is about right but you can adjust it if you encounter issues.

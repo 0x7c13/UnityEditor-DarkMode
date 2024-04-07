@@ -23,10 +23,7 @@ jobs:
       uses: lukka/get-cmake@latest
 
     - name: Build project
-      run: |
-        cmake -B build
-        cd build
-        cmake --build . --config Release
+      run: cmake -B build && cmake --build build --config Release
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4.3.1
