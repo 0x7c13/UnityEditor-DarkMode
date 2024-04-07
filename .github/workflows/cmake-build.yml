@@ -1,0 +1,30 @@
+name: CMake build on windows
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up MSVC toolchain
+      uses: ilammy/msvc-dev-cmd@v1
+      
+    - name: Install CMake
+      uses: lukka/get-cmake@v3.21.1
+
+    - name: Build
+      run: |
+        cmake -B build
+        cd build
+        cmake --build . --config Release
+
