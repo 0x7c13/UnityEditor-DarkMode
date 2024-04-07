@@ -20,7 +20,7 @@ jobs:
       uses: ilammy/msvc-dev-cmd@v1
       
     - name: Install CMake
-      uses: lukka/get-cmake@v3.21.1
+      uses: lukka/get-cmake@latest
 
     - name: Build
       run: |
