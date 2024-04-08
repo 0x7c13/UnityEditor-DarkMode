@@ -7,7 +7,7 @@ A fully working runtime dark mode mod for Unity Editor on Windows with:
 - Dark context menu
 - And more...
 
-> This works 100% on Windows 11 and should work on Windows 10 1903+ as well. Tested on Unity 2019, 2020, 2021, 2022, 2023 and Unity 6.
+> This runtime mod works on Windows 11 and Windows 10 1903+. Tested on Unity 2019, 2020, 2021, 2022, 2023 and Unity 6.
 
 ![Screenshot](screenshot.png?raw=true)
 
@@ -15,7 +15,9 @@ A fully working runtime dark mode mod for Unity Editor on Windows with:
 - Download the `UnityEditorDarkMode.dll` from [releases](https://github.com/0x7c13/UnityEditor-DarkMode/releases)
 
   > **WARNING:** If you feel uncomfortable downloading a malicious DLL from a stranger like me, then you should not:) Take a look at later sections to see how it works and how to build it yourself if you prefer. Please do your own homework and make your own judgement. I offer this approach as a convenience for those who don't want to build a C++ project themselves.
-- Add a Unity editor script to your project like below:
+- Now, you have two options:
+
+    Option 1: Add a Unity editor script to your project like below:
     ```C#
     #if UNITY_EDITOR_WIN // Windows only, obviously
     namespace Editor.Theme // Change this to your own namespace you like or simply remove it
@@ -46,6 +48,12 @@ A fully working runtime dark mode mod for Unity Editor on Windows with:
     }
     #endif
     ```
+    Option 2 (Unity 2021 or higher): Copy the DLL into your Unity project and apply below settings to the DLL in the Unity Editor inspector:
+
+    ![dll-setting](screenshot-dll-setting.png?raw=true)
+    
+    Make sure `Load on startup` is checked which will make the DLL to be loaded on Unity Editor startup.
+
     > **NOTE:** You could also inject the dll using `withdll.exe` from [Detours](https://github.com/microsoft/Detours). Instructions are provided in the later sections for the use of `withdll.exe`.
 - Restart Unity Editor and you are done!
 - Now enjoy the immersive dark mode in Unity Editor!
