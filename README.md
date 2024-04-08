@@ -15,33 +15,15 @@ A fully working runtime dark mode mod for Unity Editor on Windows with:
 - Download the `UnityEditorDarkMode.dll` from [releases](https://github.com/0x7c13/UnityEditor-DarkMode/releases)
 
   > **WARNING:** If you feel uncomfortable downloading a malicious DLL from a stranger like me, then you should not:) Take a look at later sections to see how it works and how to build it yourself if you prefer. Please do your own homework and make your own judgement. I offer this approach as a convenience for those who don't want to build a C++ project themselves.
-- Add a Unity editor script to your project like below if you are using `Unity 2021 or later` (2021, 2022, 2023 & Unity 6):
+- Add a Unity editor script to your project like below:
     ```C#
+    #if UNITY_EDITOR_WIN // Windows only, obviously
     namespace Editor.Theme // Change this to your own namespace you like or simply remove it
     {
         using System.Runtime.InteropServices;
         using UnityEditor;
 
-        public static class DarkMode
-        {
-            [InitializeOnLoadMethod]
-            // Change below path to the path of the downloaded dll or
-            // simply put the dll in the same directory as the script and use
-            // [DllImport("UnityEditorDarkMode.dll", EntryPoint = "DllMain")] instead
-            [DllImport(@"C:\Users\<...>\Desktop\UnityEditorDarkMode.dll", EntryPoint = "DllMain")]
-            public static extern void _();
-        }
-    }
-    ```
-- Add a Unity editor script to your project like below if you are using `Unity 2020 or earlier` (2019, 2020):
-    ```C#
-    namespace Editor.Theme // Change this to your own namespace you like or simply remove it
-    {
-        using System.Runtime.InteropServices;
-        using System.Threading;
-        using UnityEditor;
-
-        public static class DarkMode
+        public static class UnityEditorDarkMode
         {
             // Change below path to the path of the downloaded dll or
             // simply put the dll in the same directory as the script and use
@@ -50,9 +32,19 @@ A fully working runtime dark mode mod for Unity Editor on Windows with:
             private static extern void _();
 
             [InitializeOnLoadMethod]
-            public static void __() { Thread.Sleep(100); _(); }
+            private static void __()
+            {
+                #if !UNITY_2021_1_OR_NEWER
+                // [InitializeOnLoadMethod] is getting called before the editor
+                // main window is created on earlier versions of Unity, so we
+                // need to wait a bit here before attaching the dll.
+                System.Threading.Thread.Sleep(100);
+                #endif
+                _(); // Attach the dll to the Unity Editor
+            }
         }
     }
+    #endif
     ```
     > **NOTE:** You could also inject the dll using `withdll.exe` from [Detours](https://github.com/microsoft/Detours). Instructions are provided in the later sections for the use of `withdll.exe`.
 - Restart Unity Editor and you are done!
@@ -104,4 +96,4 @@ Ok, so what I have done on top of `ReaperThemeHackDll` is:
 ## Known issues
 > I haven't found any major issues so far. Please let me know if you find any issues by creating an issue in this repository. 
 
-The reason why the dll injection script is different for `Unity 2021 or later` and `Unity 2020 or earlier` is because of the way Unity Editor initializes the main window. It looks like the `[InitializeOnLoadMethod]` is getting called before the main window is created in earlier versions of Unity (2019, 2020). This is causing the sub-classing to fail since the main window is not found at dll attach time. So a simple workaround is to manually invoke the dll after the main window is created by sleeping the thread for some time. 100 ms is about right but you can adjust it if you encounter issues.
+The reason why the DLL injection script is different for `Unity 2021 or later` and `Unity 2020 or earlier` is because the `[InitializeOnLoadMethod]` is getting called before the main window is created in earlier versions of Unity (2019, 2020). This is causing the sub-classing to fail since the main window is not found at dll attach time. So a simple workaround is to manually invoke the dll after the main window is created by sleeping the thread for some time. 100 ms is about right but you can adjust it if you encounter issues.
