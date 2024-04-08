@@ -11,7 +11,14 @@ A fully working runtime dark mode mod for Unity Editor on Windows with:
 
 ![Screenshot](screenshot.png?raw=true)
 
-## How to use it?
+## Easy installation guide (Unity 2021 or newer)
+- Download the `UnityEditorDarkMode.unitypackage` from [releases](https://github.com/0x7c13/UnityEditor-DarkMode/releases) and double click to install it to your Unity project.
+
+  > **WARNING:** If you feel uncomfortable downloading a malicious Unity Package from a stranger like me, then you should not:) Take a look at later sections to see how it works and how to build it yourself if you prefer. Please do your own homework and make your own judgement. I offer this approach as a convenience only.
+- Restart Unity Editor and you are done!
+- Now enjoy the immersive dark mode in Unity Editor!
+
+## Manual installation guide (For all Unity versions)
 - Download the `UnityEditorDarkMode.dll` from [releases](https://github.com/0x7c13/UnityEditor-DarkMode/releases)
 
   > **WARNING:** If you feel uncomfortable downloading a malicious DLL from a stranger like me, then you should not:) Take a look at later sections to see how it works and how to build it yourself if you prefer. Please do your own homework and make your own judgement. I offer this approach as a convenience for those who don't want to build a C++ project themselves.
@@ -19,9 +26,11 @@ A fully working runtime dark mode mod for Unity Editor on Windows with:
 
     ![dll-setting](screenshot-dll-setting.png?raw=true)
     
-    Make sure `Load on startup` is checked which will make the DLL to be loaded on Unity Editor startup.
+  - Make sure `Load on startup` is checked which will make the DLL to be loaded on Unity Editor startup.
+  - Make sure `OS` is set to `Windows` which will make the DLL to be loaded only on Windows OS.
+  - Make sure only `Editor` is checked which will make the DLL to be loaded only in the Unity Editor.
 
-    > **NOTE:** You could also inject the dll using `withdll.exe` from [Detours](https://github.com/microsoft/Detours). Instructions are provided in the later sections for the use of `withdll.exe`.
+  > **NOTE:** You could also inject the dll using `withdll.exe` from [Detours](https://github.com/microsoft/Detours). Instructions are provided in the later sections for the use of `withdll.exe`.
 - Restart Unity Editor and you are done!
 - Now enjoy the immersive dark mode in Unity Editor!
 
@@ -29,7 +38,7 @@ A fully working runtime dark mode mod for Unity Editor on Windows with:
 After first launch, a `UnityEditorDarkMode.dll.ini` file will be created in the same directory as the dll. You can modify the values in this file to change the theme (Restart the editor after changing the values).
 
 ## How to remove it?
-Remove the Unity editor script you added to your project and that's it! All magic happens at runtime:)
+Remove the DLL from your project and restart Unity Editor (You need to close the editor before deleting the DLL).
 
 ## How to build it?
 - Make sure latest `CMake`, `Visual Studio` and `MSVC toolchain` are installed on your system. Then run below command in the project directory:
