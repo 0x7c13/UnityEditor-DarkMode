@@ -11,7 +11,7 @@ A fully working runtime dark mode mod for Unity Editor on Windows with:
 
 ![Screenshot](screenshot.png?raw=true)
 
-## Easy installation guide (Unity 2021 or newer)
+## Easy installation guide
 - Download the `UnityEditorDarkMode.unitypackage` from [releases](https://github.com/0x7c13/UnityEditor-DarkMode/releases) and double click to install it to your Unity project.
 
   > **WARNING:** If you feel uncomfortable downloading a malicious Unity Package from a stranger like me, then you should not:) Take a look at later sections to see how it works and how to build it yourself if you prefer. Please do your own homework and make your own judgement. I offer this approach as a convenience only.
@@ -30,12 +30,22 @@ A fully working runtime dark mode mod for Unity Editor on Windows with:
   - Make sure `OS` is set to `Windows` which will make the DLL to be loaded only on Windows OS.
   - Make sure only `Editor` is checked which will make the DLL to be loaded only in the Unity Editor.
 
-  > **NOTE:** You could also inject the dll using `withdll.exe` from [Detours](https://github.com/microsoft/Detours). Instructions are provided in the later sections for the use of `withdll.exe`.
 - Restart Unity Editor and you are done!
 - Now enjoy the immersive dark mode in Unity Editor!
 
+> **NOTE:** You could also inject the DLL into the Unity Editor process yourself using your preferred approach. Another way would be using `withdll.exe` from [Detours](https://github.com/microsoft/Detours). Instructions are provided in the later sections for the use of `withdll.exe`.
+
 ## How to change the theme?
-After first launch, a `UnityEditorDarkMode.dll.ini` file will be created in the same directory as the dll. You can modify the values in this file to change the theme (Restart the editor after changing the values).
+After first launch, a `UnityEditorDarkMode.dll.ini` file will be created in the same directory as the dll. You can modify the values in this file to change the theme (Restart the editor after changing the values). Default values are given below:
+```ini
+# Default values:
+menubar_textcolor = 200,200,200
+menubar_textcolor_disabled = 160,160,160
+menubar_bgcolor = 48,48,48
+menubaritem_bgcolor = 48,48,48
+menubaritem_bgcolor_hot = 62,62,62
+menubaritem_bgcolor_selected = 62,62,62
+```
 
 ## How to remove it?
 Remove the DLL from your project and restart Unity Editor (You need to close the editor before deleting the DLL).
@@ -60,7 +70,7 @@ Ok, so what I have done on top of `ReaperThemeHackDll` is:
     [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
     private static extern int GetClassName(IntPtr hWnd, char[] lpClassName, int nMaxCount);
     ```
-- I have verified that the window class name is consistent across different Unity Editor versions (2020, 2021, 2022, 2023, Unity 6) so it should work on most versions. If not, you should probably make further modifications to the code to use the C++ `GetClassName` Win32 API to get the window class name dynamically at runtime.
+- I have verified that the window class name is consistent across different Unity Editor versions (2019, 2020, 2021, 2022, 2023, Unity 6) so it should work on most versions. If not, you should probably make further modifications to the code to use the C++ `GetClassName` Win32 API to get the window class name dynamically at runtime.
 
   > **NOTE:** If you do this, it basically means this hack can be used for any Windows application that uses the default white Win32 title bar, menu bar, context menu, etc.
 - A different color preset is given by default which I think looks better with Unity Editor.
