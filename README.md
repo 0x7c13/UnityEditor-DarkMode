@@ -9,7 +9,7 @@ A fully working runtime dark mode mod for Unity Editor on Windows with:
 
 > This runtime mod works on Windows 11 and Windows 10 1903+. Tested on Unity 2019, 2020, 2021, 2022, 2023 and Unity 6.
 
-![Screenshot](screenshot.png?raw=true)
+![Screenshot](screenshot.jpg?raw=true)
 
 ## Easy installation guide
 - Download the `UnityEditorDarkMode.unitypackage` from [releases](https://github.com/0x7c13/UnityEditor-DarkMode/releases) and double click to install it to your Unity project.
@@ -75,7 +75,6 @@ There are few options:
 ## How to change the theme?
 After first launch, a `UnityEditorDarkMode.dll.ini` file will be created in the same directory as the dll. You can modify the values in this file to change the theme (Restart the editor after changing the values). Default values are given below:
 ```ini
-# Default values:
 menubar_textcolor = 200,200,200
 menubar_textcolor_disabled = 160,160,160
 menubar_bgcolor = 48,48,48
