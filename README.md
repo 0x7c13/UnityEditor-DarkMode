@@ -33,7 +33,44 @@ A fully working runtime dark mode mod for Unity Editor on Windows with:
 - Restart Unity Editor and you are done!
 - Now enjoy the immersive dark mode in Unity Editor!
 
-> **NOTE:** You could also inject the DLL into the Unity Editor process yourself using your preferred approach. Another way would be using `withdll.exe` from [Detours](https://github.com/microsoft/Detours). Instructions are provided in the later sections for the use of `withdll.exe`.
+## What if you don't want to add the DLL to your project?
+There are few options:
+- You could inject the DLL into the Unity Editor process yourself using your preferred approach.
+- Use `withdll.exe` from [Detours](https://github.com/microsoft/Detours). Create a batch script or PowerShell script to run the Unity Editor with the DLL attached like below:
+    ```cmd
+    .\withdll.exe /d:UnityEditorDarkMode.dll ^
+    "C:\Program Files\Unity\Hub\Editor\2022.3.22f1\Editor\Unity.exe" ^
+    -projectPath "C:\<Path>\<To>\<Your>\<UnityProjectFolder>"
+    ```
+- Put the DLL outside of your project and add a Unity Editor script to your project like below:
+    ```C#
+    #if UNITY_EDITOR_WIN // Windows only, obviously
+    namespace Editor.Theme // Change this to your own namespace you like or simply remove it
+    {
+        using System.Runtime.InteropServices;
+        using UnityEditor;
+
+        public static class UnityEditorDarkMode
+        {
+            // Change below path to the path of the downloaded dll
+            [DllImport(@"C:\Users\<...>\Desktop\UnityEditorDarkMode.dll", EntryPoint = "DllMain")]
+            private static extern void _();
+
+            [InitializeOnLoadMethod]
+            private static void __()
+            {
+                #if !UNITY_2021_1_OR_NEWER
+                // [InitializeOnLoadMethod] is getting called before the editor
+                // main window is created on earlier versions of Unity, so we
+                // need to wait a bit here before attaching the dll.
+                System.Threading.Thread.Sleep(100);
+                #endif
+                _(); // Attach the dll to the Unity Editor
+            }
+        }
+    }
+    #endif
+    ```
 
 ## How to change the theme?
 After first launch, a `UnityEditorDarkMode.dll.ini` file will be created in the same directory as the dll. You can modify the values in this file to change the theme (Restart the editor after changing the values). Default values are given below:
