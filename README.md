@@ -15,7 +15,7 @@ A fully working runtime dark mode mod for Unity Editor on Windows with:
 ![Screenshot](screenshot.jpg?raw=true)
 
 ## Easy installation guide
-- Download the `UnityEditorDarkMode.unitypackage` from Unity [AssetStore](https://assetstore.unity.com/packages/slug/281842) or GitHub [releases](https://github.com/0x7c13/UnityEditor-DarkMode/releases) and double click to install it to your Unity project.
+- Download the `UnityEditorDarkMode.unitypackage` from Unity [AssetStore](https://assetstore.unity.com/packages/slug/281842) or GitHub [Releases](https://github.com/0x7c13/UnityEditor-DarkMode/releases) and double click to install it to your Unity project.
 
   > **WARNING:** If you feel uncomfortable downloading a malicious Unity Package from a stranger like me, then you should not:) Take a look at later sections to see how it works and how to build it yourself if you prefer. Please do your own homework and make your own judgement. I offer this approach as a convenience only.
 - Restart Unity Editor and you are done!
